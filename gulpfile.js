@@ -143,6 +143,15 @@ var config = {
     }
   },
 
+  markup: {
+    src: 'views/**/*.html',
+    options: {
+      watch: true,
+      noCache: true
+    },
+    dest: 'www'
+  },
+
   // watch
   watch: {
     sass: 'src/scss/**/*.scss',
@@ -170,6 +179,9 @@ var browserSync = require('browser-sync').create();
 var rename = require('gulp-rename');
 var mergeStream = require('merge-stream');
 var uncss = require('gulp-uncss');
+var nunjucks = require('gulp-nunjucks');
+
+var data = require('./views/data.json');
 
 function errorlog (error) {  
   console.error.bind(error);  
@@ -343,6 +355,12 @@ gulp.task('inject', function () {
       .pipe(gulp.dest(config.inject.dest));
 });
 
+gulp.task('markup', () =>
+  gulp.src(config.markup.src)
+    .pipe(nunjucks.compile(data), config.markup.options)
+    .pipe(gulp.dest(config.markup.dest))
+);
+
 // Server
 gulp.task('server', function () {
   php.server(config.server);
@@ -353,12 +371,7 @@ gulp.task('sync', ['server'], function() {
 
 // watch
 gulp.task('watch', function () {
-  gulp.watch(config.watch.sass, ['sass']);
-  gulp.watch(config.js.src, ['js']);
-  gulp.watch(config.svg_sprites.src, ['svgsprites']);
-  gulp.watch(config.svg_min.src, ['svgmin']);
-  gulp.watch(config.svg_fallback.src, ['svgfallback']);
-  gulp.watch(config.watch.php).on('change', browserSync.reload);
+  gulp.watch(config.markup.src, ['markup']);
   gulp.watch(config.watch.html).on('change', browserSync.reload);
 })
 

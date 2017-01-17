@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>nunjucks test - Home</title>
+  <title>nunjucks test - {{ title }}</title>
   <style>
     body {
       margin: 0;
@@ -11,8 +11,7 @@
 </head>
 <body>
 
-  
-  
+  {% block header %}
   <header class="site-header">
     <div class="logo"><a href="/www/">logo</a></div>
     <nav>
@@ -23,42 +22,35 @@
       </ul>
     </nav>
   </header>
-  
-  <div class="banner">Banner</div>
-
+  {% endblock %}
 
   <div class="container">
-    
-    <h1>Hello, William Lin</h1>
+    {% set username = "William Lin" %}
+    <h1>Hello, {{username}}</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio eius, quisquam, reiciendis, neque magni fugit corrupti, iste eum dignissimos ipsum qui aspernatur amet voluptas! Asperiores ea consequatur placeat saepe itaque!</p>
   </div>
 
-  
+  {% block footer %}
+  <footer class="site-footer">
+    <div class="logo-footer"><a href="/www/">logo</a></div>
+    <div class="copyright">&copy; 2017</div>
+  </footer>
+  {% endblock %}
 
-
-  <div class="field">
-    <input type="password" name="pass"
-           value="" />
-  </div>
-  
-
-
-  
+  {% raw %}
     <h2 class="new">content</h2>
-  
+  {% endraw %}
 
-  
-  
+  {% macro field(name, value='', type='text') %}
   <div class="field">
-    <input type="password" name="pass"
-           value="" />
+    <input type="{{ type }}" name="{{ name }}"
+           value="{{ value | escape }}" />
   </div>
-  
-
+  {% endmacro %}
+  {{ field('pass', type='password') }}
+{% set code = 'header {\n  left: 100px; \n}' %}
 <pre>
-header {
-  left: 100px; 
-}
+{{ code | escape }}
 </pre>
 </body>
 </html>

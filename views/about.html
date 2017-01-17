@@ -1,0 +1,17 @@
+{% set title = 'About' %}
+{% extends "part/base.html" %}
+
+{% block title %}
+- Home
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+  <div class="banner">Banner</div>
+{% endblock %}
+
+{% macro input(id, name, type='text') %}
+<input type="{{ type }}" id="{{ id }}" name="{{ name }}">
+{% endmacro %}
+
+{{ input('username', 'username') }}
