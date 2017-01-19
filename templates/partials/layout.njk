@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>nunjucks test - {{ title }}</title>
+  <link rel="stylesheet" type="text/css" href="/assets/css/main.css"/>
+</head>
+<body>
+
+  {% block header -%}
+  <header class="site-header clearfix">
+    <div class="container">
+      <div class="logo"><a href="/www/"><img src="http://placehold.it/100x30/000000/000000" alt=""></a></div>
+      <form action="" class="header-search">
+        <input type="text" placeholder="Search ...">
+        <button>Search</button>
+      </form>
+      <nav class="site-nav">
+        <ul>
+          {# Loop through all the users -#}
+          {% set pages = ['home', 'about', 'news'] -%}
+          {% for item in pages -%}
+          <li {{ 'class=current' if page === item }}><a href="{{ item | replace('home', 'index') }}.html">{{ item | capitalize }}</a></li>
+          {% endfor -%}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  {%- endblock %}
+
+  {% block main -%}
+  <div class="container">
+    <div class="banner">
+      <figure><a href=""><img src="{{ images[9] }}?w=1000&h=500" alt=""></a></figure>
+      <h2>{{ headings | random | truncate(40, true) }}</h2>
+    </div>
+    <ul class="news-list">
+      {% if page === 'home' %}
+        {% for i in range(0, 10) -%}
+          <li><a href=""><img src="{{ images | random }}?w=100&h=60" alt=""><span>{{ headings | random | truncate(40, true) }}</span></a></li>
+        {%- endfor %}
+      {% else %}
+        {% for i in range(0, 10) -%}
+          <li><a href=""><img src="{{ images[i] }}?w=100&h=60" alt=""><span>{{ headings[i] | truncate(40, true) }}</span></a></li>
+        {%- endfor %}
+      {% endif %}
+    </ul>
+  </div>
+  {%- endblock %}
+
+  {% block footer -%}
+  <footer class="site-footer">
+    <div class="container clearfix">
+      <div class="logo-footer"><a href="/www/"><img src="http://placehold.it/100x30/000000/000000" alt=""></a></div>
+      <div class="copyright">&copy; {{ year }} The Company Name , INC. All Rights Reserved.</div>
+    </div>      
+  </footer>
+  {%- endblock %}
+</body>
+</html>
