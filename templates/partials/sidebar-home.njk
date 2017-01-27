@@ -1,0 +1,3 @@
+{% for i in range(0, 10) -%}
+  <li><a href=""><img src="{{ images | random }}?w=100&h=60" alt=""><span>{{ headings | random | truncate(40, true) }}</span></a></li>
+{%- endfor %}

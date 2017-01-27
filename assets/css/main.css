@@ -27,9 +27,18 @@ a {
 .site-header {
   margin-bottom: 40px;
 }
-.logo,.logo-footer {
+.logo {
+  font-weight: bold;
+  font-style: italic;
+  text-transform: capitalize;
+  color: #fff;
+  background: #FD9797;
   float: left;
   margin-right: 10px;
+}
+.logo a {
+  display: block;
+  padding: 10px;
 }
 .header-search {
   float: right;

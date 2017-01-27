@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>nunjucks test - {{ title }}</title>
-  <link rel="stylesheet" type="text/css" href="/assets/css/main.css"/>
+  <link rel="stylesheet" type="text/css" href="./assets/css/main.css"/>
 </head>
 <body>
 
   {% block header -%}
   <header class="site-header clearfix">
     <div class="container">
-      <div class="logo"><a href="/www/"><img src="http://placehold.it/100x30/000000/000000" alt=""></a></div>
+      <div class="logo"><a href="/www/">nunjucks</a></div>
       <form action="" class="header-search">
         <input type="text" placeholder="Search ...">
         <button>Search</button>
@@ -34,24 +34,22 @@
       <figure><a href=""><img src="{{ images[9] }}?w=1000&h=500" alt=""></a></figure>
       <h2>{{ headings | random | truncate(40, true) }}</h2>
     </div>
+    
     <ul class="news-list">
-      {% if page === 'home' %}
-        {% for i in range(0, 10) -%}
-          <li><a href=""><img src="{{ images | random }}?w=100&h=60" alt=""><span>{{ headings | random | truncate(40, true) }}</span></a></li>
-        {%- endfor %}
+      {%- include 'partials/sidebar.njk' ignore missing -%}
+{#       {% if page === 'home' %}
+        {% include 'partials/sidebar-home.njk' ignore missing %}
       {% else %}
-        {% for i in range(0, 10) -%}
-          <li><a href=""><img src="{{ images[i] }}?w=100&h=60" alt=""><span>{{ headings[i] | truncate(40, true) }}</span></a></li>
-        {%- endfor %}
+        {% include 'partials/sidebar-sub.njk' ignore missing %}
       {% endif %}
-    </ul>
+ #}    </ul>
   </div>
   {%- endblock %}
 
   {% block footer -%}
   <footer class="site-footer">
     <div class="container clearfix">
-      <div class="logo-footer"><a href="/www/"><img src="http://placehold.it/100x30/000000/000000" alt=""></a></div>
+      <div class="logo"><a href="/www/">nunjucks</a></div>
       <div class="copyright">&copy; {{ year }} The Company Name , INC. All Rights Reserved.</div>
     </div>      
   </footer>
