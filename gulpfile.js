@@ -38,8 +38,8 @@ var gulp = require('gulp');
 var php = require('gulp-connect-php');
 var browserSync = require('browser-sync').create();
 var rename = require("gulp-rename");
-// var nunjucks = require('gulp-nunjucks');
-var nunjucksRender = require('gulp-nunjucks-md');
+var nunjucks = require('gulp-nunjucks');
+// var nunjucksRender = require('gulp-nunjucks-md');
 var prettify = require('gulp-html-prettify');
 var htmltidy = require('gulp-htmltidy');
 var gulpdata = require('gulp-data');
@@ -53,16 +53,41 @@ function errorlog (error) {
   this.emit('end');  
 }  
 
-gulp.task('html', function () {
+// gulp.task('html', function () {
+//   var n = 0;
+//   data.imageCount = function () { return n += 1; };
+
+//   return gulp.src(config.html.src)
+//     .pipe(gulpdata(data))
+//     .pipe(nunjucksRender({
+//       path: ['templates/'], // String or Array
+//       envOptions: config.html.options,
+//       // manageEnv: function(environment) {
+//       //   environment.addGlobal('imageCount', 1)
+//       // }
+//     }))
+//     .pipe(htmltidy({
+//       doctype: 'html5',
+//       wrap: 0,
+//       hideComments: true,
+//       indent: true,
+//       'indent-attributes': false,
+//       'drop-empty-elements': false,
+//       'force-output': true
+//     }))
+//     .pipe(gulp.dest(config.html.dest))
+// });
+
+gulp.task('html', function() {
+  var n = 0;
+  data.imageCount = function () { return n += 1; };
+
   return gulp.src(config.html.src)
-    .pipe(gulpdata(data))
-    .pipe(nunjucksRender({
-      path: ['templates/'], // String or Array
-      envOptions: config.html.options,
-      manageEnv: function(environment) {
-        environment.addGlobal('imageCount', 1)
-      }
+    .pipe(nunjucks.compile(data), config.html.options)
+    .pipe(rename(function (path) {
+      path.extname = ".html";
     }))
+    // .pipe(prettify({indent_char: ' ', indent_size: 2}))
     .pipe(htmltidy({
       doctype: 'html5',
       wrap: 0,
@@ -74,25 +99,6 @@ gulp.task('html', function () {
     }))
     .pipe(gulp.dest(config.html.dest))
 });
-
-// gulp.task('html', () =>
-//   gulp.src(config.html.src)
-//     .pipe(nunjucks.compile(data), config.html.options)
-//     .pipe(rename(function (path) {
-//       path.extname = ".html";
-//     }))
-//     // .pipe(prettify({indent_char: ' ', indent_size: 2}))
-//     .pipe(htmltidy({
-//       doctype: 'html5',
-//       wrap: 0,
-//       hideComments: true,
-//       indent: true,
-//       'indent-attributes': false,
-//       'drop-empty-elements': false,
-//       'force-output': true
-//     }))
-//     .pipe(gulp.dest(config.html.dest))
-// );
 
 // Server
 // gulp.task('server', function () {

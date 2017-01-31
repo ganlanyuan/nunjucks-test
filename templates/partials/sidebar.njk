@@ -2,9 +2,6 @@
 
 {% if page === 'home' %}
   {{ news.li(5, false) }}
-  {% set imageCount = imageCount + 5 %}
 {% else %}
-  {{ news.li(8, false) }}
-  {% set imageCount = imageCount + 8 %}
+  {{ news.li(12, false) }}
 {% endif %}
-
