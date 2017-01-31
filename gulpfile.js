@@ -79,7 +79,7 @@ function errorlog (error) {
 // });
 
 gulp.task('html', function() {
-  var n = 0;
+  var n = 10;
   data.imageCount = function () { return n += 1; };
 
   return gulp.src(config.html.src)
