@@ -1,7 +1,10 @@
 {% import './news.njk' as news with context %}
 
-{%- if page === 'home' %}
-  {{- news.li(5, false) -}}
+{% if page === 'home' %}
+  {{ news.li(5, false) }}
+  {% set imageCount = imageCount + 5 %}
 {% else %}
-  {{- news.li(10, true) -}}
-{% endif -%}
+  {{ news.li(8, false) }}
+  {% set imageCount = imageCount + 8 %}
+{% endif %}
+

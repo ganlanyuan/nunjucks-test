@@ -1,3 +1,4 @@
+{# {% set imageCount = 1 %} #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +8,11 @@
 </head>
 <body>
 
+  <!-- header start -->
   {% block header -%}
   <header class="site-header clearfix">
     <div class="container">
-      <div class="logo"><a href="/www/">nunjucks</a></div>
+      <div class="logo"><a href="/www/">nunjucks{{imageCount}}</a></div>
       <form action="" class="header-search">
         <input type="text" placeholder="Search ...">
         <button>Search</button>
@@ -28,7 +30,9 @@
   </header>
   {%- endblock %}
 
+  <!-- main start -->
   {% block main -%}
+  <div></div>
   <div class="container">
     <div class="banner">
       <figure><a href=""><img src="{{ images[9] }}?w=1000&h=500" alt=""></a></figure>
@@ -36,7 +40,8 @@
     </div>
     
     <ul class="news-list">
-      {%- include 'partials/sidebar.njk' ignore missing -%}
+      {% include 'partials/sidebar.njk' ignore missing %}
+      {% include 'partials/sidebar.njk' ignore missing %}
 {#       {% if page === 'home' %}
         {% include 'partials/sidebar-home.njk' ignore missing %}
       {% else %}
@@ -46,6 +51,7 @@
   </div>
   {%- endblock %}
 
+  <!-- footer start -->
   {% block footer -%}
   <footer class="site-footer">
     <div class="container clearfix">
