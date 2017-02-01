@@ -1,6 +1,6 @@
 {% macro li(count, randomData = false) %}
 {% for i in range(0, count) %}
-  {% set ct = imageCount() %}
+  {% set ct = getImageCount() %}
   <li><a href=""><img src="{{ images | random if randomData else images[ct] }}?w=100&h=60" alt=""><span>{{ ct + ' ' }}{{ headings[i] | truncate(40, true) }}</span></a></li>
 {% endfor %}
 {% endmacro %}

@@ -1,24 +1,17 @@
 var config = {
   sassLang: 'libsass',
   sourcemaps: '../sourcemaps',
-  // server: {
-  //   base: '.',
-  //   hostname: '0.0.0.0',
-  //   keepalive: true,
-  //   stdio: 'ignore',
-  // },
   browserSync: {
     server: {
       baseDir: './'
     },
-    // proxy: '0.0.0.0:8000',
     open: false,
     notify: false
   },
 
   html: {
     src: 'templates/*.njk',
-    watch: 'templates/**/*.njk',
+    watch: ['templates/**/*.njk', 'templates/**/*.json'],
     options: {
       watch: true,
       noCache: true,
@@ -35,18 +28,16 @@ var config = {
 };
 
 var gulp = require('gulp');
-var php = require('gulp-connect-php');
 var browserSync = require('browser-sync').create();
 var rename = require("gulp-rename");
 var nunjucks = require('gulp-nunjucks');
 // var nunjucksRender = require('gulp-nunjucks-md');
-var prettify = require('gulp-html-prettify');
 var htmltidy = require('gulp-htmltidy');
-var gulpdata = require('gulp-data');
 
-var data = require('./templates/data.json');
-data.year = new Date().getFullYear();
-// data.imageCount = 1;
+function requireUncached( $module ) {
+  delete require.cache[require.resolve( $module )];
+  return require( $module );
+}
 
 function errorlog (error) {  
   console.error.bind(error);  
@@ -55,7 +46,7 @@ function errorlog (error) {
 
 // gulp.task('html', function () {
 //   var n = 0;
-//   data.imageCount = function () { return n += 1; };
+//   data.getImageCount = function () { return n += 1; };
 
 //   return gulp.src(config.html.src)
 //     .pipe(gulpdata(data))
@@ -63,7 +54,7 @@ function errorlog (error) {
 //       path: ['templates/'], // String or Array
 //       envOptions: config.html.options,
 //       // manageEnv: function(environment) {
-//       //   environment.addGlobal('imageCount', 1)
+//       //   environment.addGlobal('getImageCount', 1)
 //       // }
 //     }))
 //     .pipe(htmltidy({
@@ -79,8 +70,11 @@ function errorlog (error) {
 // });
 
 gulp.task('html', function() {
-  var n = 10;
-  data.imageCount = function () { return n += 1; };
+  var data = requireUncached('./templates/data.json');
+  data.year = new Date().getFullYear();
+
+  var imageCount = 0;
+  data.getImageCount = function () { return imageCount += 1; };
 
   return gulp.src(config.html.src)
     .pipe(nunjucks.compile(data), config.html.options)
@@ -101,9 +95,6 @@ gulp.task('html', function() {
 });
 
 // Server
-// gulp.task('server', function () {
-//   php.server(config.server);
-// });
 gulp.task('sync', function() {
   browserSync.init(config.browserSync);
 });
