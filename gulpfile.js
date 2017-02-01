@@ -1,4 +1,10 @@
-var config = {
+const gulp = require('gulp');
+const browserSync = require('browser-sync').create();
+const rename = require("gulp-rename");
+const nunjucks = require('gulp-nunjucks');
+const htmltidy = require('gulp-htmltidy');
+
+const config = {
   sassLang: 'libsass',
   sourcemaps: '../sourcemaps',
   browserSync: {
@@ -9,7 +15,7 @@ var config = {
     notify: false
   },
 
-  html: {
+  nunjucks: {
     src: 'templates/*.njk',
     watch: ['templates/**/*.njk', 'templates/**/*.json'],
     options: {
@@ -27,13 +33,6 @@ var config = {
   },
 };
 
-var gulp = require('gulp');
-var browserSync = require('browser-sync').create();
-var rename = require("gulp-rename");
-var nunjucks = require('gulp-nunjucks');
-// var nunjucksRender = require('gulp-nunjucks-md');
-var htmltidy = require('gulp-htmltidy');
-
 function requireUncached( $module ) {
   delete require.cache[require.resolve( $module )];
   return require( $module );
@@ -44,44 +43,16 @@ function errorlog (error) {
   this.emit('end');  
 }  
 
-// gulp.task('html', function () {
-//   var n = 0;
-//   data.getImageCount = function () { return n += 1; };
-
-//   return gulp.src(config.html.src)
-//     .pipe(gulpdata(data))
-//     .pipe(nunjucksRender({
-//       path: ['templates/'], // String or Array
-//       envOptions: config.html.options,
-//       // manageEnv: function(environment) {
-//       //   environment.addGlobal('getImageCount', 1)
-//       // }
-//     }))
-//     .pipe(htmltidy({
-//       doctype: 'html5',
-//       wrap: 0,
-//       hideComments: true,
-//       indent: true,
-//       'indent-attributes': false,
-//       'drop-empty-elements': false,
-//       'force-output': true
-//     }))
-//     .pipe(gulp.dest(config.html.dest))
-// });
-
-gulp.task('html', function() {
-  var data = requireUncached('./templates/data.json');
+gulp.task('nunjucks', function() {
+  let data = requireUncached('./templates/data.json');
   data.year = new Date().getFullYear();
 
-  var imageCount = 0;
+  let imageCount = 0;
   data.getImageCount = function () { return imageCount += 1; };
 
-  return gulp.src(config.html.src)
-    .pipe(nunjucks.compile(data), config.html.options)
-    .pipe(rename(function (path) {
-      path.extname = ".html";
-    }))
-    // .pipe(prettify({indent_char: ' ', indent_size: 2}))
+  return gulp.src(config.nunjucks.src)
+    .pipe(nunjucks.compile(data), config.nunjucks.options)
+    .pipe(rename(function (path) { path.extname = ".html"; }))
     .pipe(htmltidy({
       doctype: 'html5',
       wrap: 0,
@@ -91,7 +62,7 @@ gulp.task('html', function() {
       'drop-empty-elements': false,
       'force-output': true
     }))
-    .pipe(gulp.dest(config.html.dest))
+    .pipe(gulp.dest(config.nunjucks.dest))
 });
 
 // Server
@@ -101,7 +72,7 @@ gulp.task('sync', function() {
 
 // watch
 gulp.task('watch', function () {
-  gulp.watch(config.html.watch, ['html']);
+  gulp.watch(config.nunjucks.watch, ['nunjucks']);
   gulp.watch(config.watch.html).on('change', browserSync.reload);
 })
 
